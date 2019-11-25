@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/algorithmVisualizer/static/css/main.8e06c35a.chunk.css",
+    "main.css": "/algorithmVisualizer/static/css/main.68c29a91.chunk.css",
     "main.js": "/algorithmVisualizer/static/js/main.d5bf833f.chunk.js",
     "main.js.map": "/algorithmVisualizer/static/js/main.d5bf833f.chunk.js.map",
     "runtime-main.js": "/algorithmVisualizer/static/js/runtime-main.374c5d50.js",
@@ -8,14 +8,14 @@
     "static/js/2.1dbc2c1b.chunk.js": "/algorithmVisualizer/static/js/2.1dbc2c1b.chunk.js",
     "static/js/2.1dbc2c1b.chunk.js.map": "/algorithmVisualizer/static/js/2.1dbc2c1b.chunk.js.map",
     "index.html": "/algorithmVisualizer/index.html",
-    "precache-manifest.90fd817b2b34e431eec62eb2215029cb.js": "/algorithmVisualizer/precache-manifest.90fd817b2b34e431eec62eb2215029cb.js",
+    "precache-manifest.d3d879e2ad62f65f3a4363fbbce2f2d9.js": "/algorithmVisualizer/precache-manifest.d3d879e2ad62f65f3a4363fbbce2f2d9.js",
     "service-worker.js": "/algorithmVisualizer/service-worker.js",
-    "static/css/main.8e06c35a.chunk.css.map": "/algorithmVisualizer/static/css/main.8e06c35a.chunk.css.map"
+    "static/css/main.68c29a91.chunk.css.map": "/algorithmVisualizer/static/css/main.68c29a91.chunk.css.map"
   },
   "entrypoints": [
     "static/js/runtime-main.374c5d50.js",
     "static/js/2.1dbc2c1b.chunk.js",
-    "static/css/main.8e06c35a.chunk.css",
+    "static/css/main.68c29a91.chunk.css",
     "static/js/main.d5bf833f.chunk.js"
   ]
 }
