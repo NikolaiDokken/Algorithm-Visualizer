@@ -1,9 +1,12 @@
-export function dijkstra(grid, startNode, finishNode) {
+// algorithm for Dijkstra and A*
+// Takes a boolean aStar and uses distace to finish
+// if aStar is true
+export function dijkstra(grid, startNode, finishNode, aStar) {
   const visitedNodesInOrder = [];
   startNode.distance = 0;
   const unvisitedNodes = getAllNodes(grid);
   while (!!unvisitedNodes.length) {
-    sortNodesByDistance(unvisitedNodes);
+    sortNodesByDistance(unvisitedNodes, finishNode, aStar);
     const closestNode = unvisitedNodes.shift();
     // If node is wall, we skip it
     if (closestNode.isWall) continue;
@@ -30,8 +33,25 @@ function getAllNodes(grid) {
 
 // Sorts unvisited nodes so that
 // first node in array is closest to startNode
-function sortNodesByDistance(unvisitedNodes) {
-  unvisitedNodes.sort((n1, n2) => n1.distance - n2.distance);
+// or closest to startNode and finishNode if
+// we are using A* algorithm
+function sortNodesByDistance(unvisitedNodes, finishNode, aStar) {
+  unvisitedNodes.sort(
+    (n1, n2) =>
+      n1.distance +
+      (aStar ? estimatedDistanceToFinish(n1, finishNode) : 0) -
+      (n2.distance + (aStar ? estimatedDistanceToFinish(n2, finishNode) : 0))
+  );
+}
+
+function estimatedDistanceToFinish(startNode, finishNode) {
+  const startRow = startNode.row;
+  const startCol = startNode.col;
+  const finishRow = finishNode.row;
+  const finishCol = finishNode.col;
+  return Math.sqrt(
+    Math.pow(finishRow - startRow, 2) + Math.pow(finishCol - startCol, 2)
+  );
 }
 
 function updateUnvisitedNeigbours(node, grid) {

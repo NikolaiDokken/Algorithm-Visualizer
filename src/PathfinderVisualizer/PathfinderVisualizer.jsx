@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import Node from "./Node/Node";
-import { dijkstra, getNodesInShortestPathOrder } from "../algorithms/dijkstra";
+import {
+  dijkstra,
+  getNodesInShortestPathOrder
+} from "../algorithms/dijkstraAndAstar";
+import NavBar from "../Components/NavBar";
 
 import "./PathfinderVisualizer.css";
 
@@ -16,6 +20,7 @@ export default class PathfinderVisualizer extends Component {
       grid: [],
       mouseIsPressed: false
     };
+    this.visualizeDijkstra = this.visualizeDijkstra.bind(this);
   }
 
   clearGrid() {
@@ -68,11 +73,11 @@ export default class PathfinderVisualizer extends Component {
     }
   }
 
-  visualizeDijkstra() {
+  visualizeDijkstra(aStar) {
     const { grid } = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
+    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode, aStar);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   }
@@ -81,10 +86,7 @@ export default class PathfinderVisualizer extends Component {
     const { grid, mouseIsPressed } = this.state;
     return (
       <div>
-        <button onClick={() => this.visualizeDijkstra()}>
-          Visualize Dijkstra!
-        </button>
-        <button onClick={() => window.location.reload()}>Clear board</button>
+        <NavBar visualizeFunction={this.visualizeDijkstra}></NavBar>
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
