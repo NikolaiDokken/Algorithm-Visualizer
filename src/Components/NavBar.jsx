@@ -1,10 +1,8 @@
 import AppBar from "@material-ui/core/AppBar";
-import React, { Component } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import { Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -35,7 +33,7 @@ export default function NavBar(props) {
             color="secondary"
             className={classes.button}
             startIcon={<DeleteIcon />}
-            onClick={() => window.location.reload(true)}
+            onClick={() => props.clearGrid()}
             style={{ width: "210px" }}
           >
             Clear Board

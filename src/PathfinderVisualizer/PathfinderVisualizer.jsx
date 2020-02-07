@@ -8,24 +8,43 @@ import NavBar from "../Components/NavBar";
 
 import "./PathfinderVisualizer.css";
 
-const START_NODE_ROW = 10;
-const START_NODE_COL = 15;
-const FINISH_NODE_ROW = 10;
-const FINISH_NODE_COL = 35;
+let START_NODE_ROW = 10;
+let START_NODE_COL = 15;
+let FINISH_NODE_ROW = 10;
+let FINISH_NODE_COL = 35;
 
 export default class PathfinderVisualizer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       grid: [],
-      mouseIsPressed: false
+      mouseIsPressed: false,
+      startIsPressed: false,
+      finishIsPressed: false
     };
     this.visualizeDijkstra = this.visualizeDijkstra.bind(this);
+    this.clearGrid = this.clearGrid.bind(this);
   }
 
   clearGrid() {
     const grid = getInitialGrid();
     this.setState({ grid });
+    setTimeout(() => {
+      grid.map(row =>
+        row.map(node => {
+          const extraClassName = node.isFinish
+            ? "node-finish"
+            : node.isStart
+            ? "node-start"
+            : node.isWall
+            ? "node-wall"
+            : "";
+          document.getElementById(
+            `node-${node.row}-${node.col}`
+          ).className = `node ${extraClassName}`;
+        })
+      );
+    }, 0);
   }
 
   componentDidMount() {
@@ -33,18 +52,38 @@ export default class PathfinderVisualizer extends Component {
   }
 
   handleMouseDown(row, col) {
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
-    this.setState({ grid: newGrid, mouseIsPressed: true });
+    if (row === START_NODE_ROW && col === START_NODE_COL) {
+      this.setState({ startIsPressed: true });
+    } else if (row === FINISH_NODE_ROW && col === FINISH_NODE_COL) {
+      this.setState({ finishIsPressed: true });
+    } else {
+      const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+      this.setState({ grid: newGrid, mouseIsPressed: true });
+    }
   }
 
   handleMousEnter(row, col) {
-    if (!this.state.mouseIsPressed) return;
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
-    this.setState({ grid: newGrid });
+    if (this.state.startIsPressed) {
+      START_NODE_ROW = row;
+      START_NODE_COL = col;
+      const newGrid = getNewGridWithUpdatedStartFinish(this.state.grid);
+      this.setState({ grid: newGrid });
+    } else if (this.state.finishIsPressed) {
+      FINISH_NODE_ROW = row;
+      FINISH_NODE_COL = col;
+      const newGrid = getNewGridWithUpdatedStartFinish(this.state.grid);
+      this.setState({ grid: newGrid });
+    } else {
+      if (!this.state.mouseIsPressed) return;
+      const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+      this.setState({ grid: newGrid });
+    }
   }
 
   handleMouseUp() {
     this.setState({ mouseIsPressed: false });
+    this.setState({ startIsPressed: false });
+    this.setState({ finishIsPressed: false });
   }
 
   animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
@@ -86,11 +125,18 @@ export default class PathfinderVisualizer extends Component {
     const { grid, mouseIsPressed } = this.state;
     return (
       <div>
-        <NavBar visualizeFunction={this.visualizeDijkstra}></NavBar>
+        <NavBar
+          visualizeFunction={this.visualizeDijkstra}
+          clearGrid={this.clearGrid}
+        ></NavBar>
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
-              <div key={rowIndex} className="grid-row">
+              <div
+                key={rowIndex}
+                className="grid-row"
+                style={{ margin: "0", padding: "0" }}
+              >
                 {row.map((node, nodeIndex) => {
                   const { row, col, isStart, isFinish, isWall } = node;
                   return (
@@ -107,6 +153,7 @@ export default class PathfinderVisualizer extends Component {
                         this.handleMousEnter(row, col)
                       }
                       onMouseUp={() => this.handleMouseUp()}
+                      style={{ margin: "0" }}
                     ></Node>
                   );
                 })}
@@ -124,22 +171,21 @@ const getInitialGrid = () => {
   for (let row = 0; row < 20; row++) {
     const currentRow = [];
     for (let col = 0; col < 50; col++) {
-      currentRow.push(createNode(row, col));
+      currentRow.push(createNode(row, col, false));
     }
     grid.push(currentRow);
   }
   return grid;
 };
 
-const createNode = (row, col) => {
+const createNode = (row, col, isWallBool) => {
   return {
     row,
     col,
     isStart: row === START_NODE_ROW && col === START_NODE_COL,
     isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
     distance: Infinity,
-    isVisited: false,
-    isWall: false,
+    isWall: isWallBool,
     previousNode: null
   };
 };
@@ -152,5 +198,17 @@ const getNewGridWithWallToggled = (grid, row, col) => {
     isWall: !node.isWall
   };
   newGrid[row][col] = newNode;
+  return newGrid;
+};
+
+const getNewGridWithUpdatedStartFinish = currentGrid => {
+  const newGrid = [];
+  for (let row = 0; row < 20; row++) {
+    const currentRow = [];
+    for (let col = 0; col < 50; col++) {
+      currentRow.push(createNode(row, col, currentGrid[row][col].isWall));
+    }
+    newGrid.push(currentRow);
+  }
   return newGrid;
 };
