@@ -4,7 +4,7 @@ import {
   dijkstra,
   getNodesInShortestPathOrder
 } from "../algorithms/dijkstraAndAstar";
-import NavBar from "../Components/NavBar";
+import Navbar from "../Components/Navbar";
 
 import "./PathfinderVisualizer.css";
 
@@ -42,6 +42,7 @@ export default class PathfinderVisualizer extends Component {
           document.getElementById(
             `node-${node.row}-${node.col}`
           ).className = `node ${extraClassName}`;
+          return null;
         })
       );
     }, 0);
@@ -125,10 +126,10 @@ export default class PathfinderVisualizer extends Component {
     const { grid, mouseIsPressed } = this.state;
     return (
       <div>
-        <NavBar
+        <Navbar
           visualizeFunction={this.visualizeDijkstra}
           clearGrid={this.clearGrid}
-        ></NavBar>
+        />
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
