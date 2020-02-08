@@ -107,9 +107,13 @@ export default function Navbar(props) {
                   another square.
                   <br /> 4. Run the algorithm{" "}
                   <font color="limegreen">(Green button)</font>
-                  <br /> 5. Clear the board to go again. Start/end node will
-                  remain at same place <font color="red">(Red button)</font>
+                  <br /> 5. Clear the board to go again.
+                  <font color="red">(Red button).</font> Start/end node will
+                  remain at same place
                   <br />
+                  <br />
+                  Mobile users: View the page in landscape mode to get a bigger
+                  grid.
                   <br />
                   Drawing walls by dragging on mobile is currently not possible,
                   I am working on fixing this!

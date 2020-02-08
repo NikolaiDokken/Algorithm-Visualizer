@@ -133,11 +133,7 @@ export default class PathfinderVisualizer extends Component {
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
-              <div
-                key={rowIndex}
-                className="grid-row"
-                style={{ margin: "0", padding: "0" }}
-              >
+              <div key={rowIndex} className="grid-row">
                 {row.map((node, nodeIndex) => {
                   const { row, col, isStart, isFinish, isWall } = node;
                   return (
@@ -169,9 +165,24 @@ export default class PathfinderVisualizer extends Component {
 
 const getInitialGrid = () => {
   const grid = [];
-  for (let row = 0; row < 20; row++) {
+  let amtCols = 0;
+  let amtRows = 0;
+  if (window.innerWidth >= window.innerHeight) {
+    amtCols = Math.floor(window.innerWidth / 38);
+    const squareWidth = Math.floor(window.innerWidth / amtCols);
+    amtRows = Math.floor((window.innerHeight - 80) / squareWidth);
+  } else {
+    amtRows = Math.floor((window.innerHeight - 80) / 47);
+    const squareHeight = Math.floor((window.innerHeight - 80) / amtRows);
+    amtCols = Math.floor(window.innerWidth / squareHeight);
+  }
+  START_NODE_COL = Math.floor(amtCols / 3) - 1;
+  START_NODE_ROW = Math.floor(amtRows / 2);
+  FINISH_NODE_COL = Math.floor((amtCols * 2) / 3) + 1;
+  FINISH_NODE_ROW = Math.floor(amtRows / 2);
+  for (let row = 0; row < amtRows; row++) {
     const currentRow = [];
-    for (let col = 0; col < 50; col++) {
+    for (let col = 0; col < amtCols; col++) {
       currentRow.push(createNode(row, col, false));
     }
     grid.push(currentRow);
@@ -204,9 +215,20 @@ const getNewGridWithWallToggled = (grid, row, col) => {
 
 const getNewGridWithUpdatedStartFinish = currentGrid => {
   const newGrid = [];
-  for (let row = 0; row < 20; row++) {
+  let amtCols = 0;
+  let amtRows = 0;
+  if (window.innerWidth >= window.innerHeight) {
+    amtCols = Math.floor(window.innerWidth / 38);
+    const squareWidth = Math.floor(window.innerWidth / amtCols);
+    amtRows = Math.floor((window.innerHeight - 80) / squareWidth);
+  } else {
+    amtRows = Math.floor((window.innerHeight - 80) / 47);
+    const squareHeight = Math.floor((window.innerHeight - 80) / amtRows);
+    amtCols = Math.floor(window.innerWidth / squareHeight);
+  }
+  for (let row = 0; row < amtRows; row++) {
     const currentRow = [];
-    for (let col = 0; col < 50; col++) {
+    for (let col = 0; col < amtCols; col++) {
       currentRow.push(createNode(row, col, currentGrid[row][col].isWall));
     }
     newGrid.push(currentRow);
