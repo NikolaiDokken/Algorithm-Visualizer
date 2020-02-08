@@ -26,8 +26,8 @@ export default class PathfinderVisualizer extends Component {
     this.clearGrid = this.clearGrid.bind(this);
   }
 
-  clearGrid() {
-    const grid = getInitialGrid();
+  clearGrid(initialLoad) {
+    const grid = getInitialGrid(initialLoad);
     this.setState({ grid });
     setTimeout(() => {
       grid.map(row =>
@@ -49,7 +49,7 @@ export default class PathfinderVisualizer extends Component {
   }
 
   componentDidMount() {
-    this.clearGrid();
+    this.clearGrid(true);
   }
 
   handleMouseDown(row, col) {
@@ -163,23 +163,17 @@ export default class PathfinderVisualizer extends Component {
   }
 }
 
-const getInitialGrid = () => {
+const getInitialGrid = initalLoad => {
   const grid = [];
-  let amtCols = 0;
-  let amtRows = 0;
-  if (window.innerWidth >= window.innerHeight) {
-    amtCols = Math.floor(window.innerWidth / 38);
-    const squareWidth = Math.floor(window.innerWidth / amtCols);
-    amtRows = Math.floor((window.innerHeight - 80) / squareWidth);
-  } else {
-    amtRows = Math.floor((window.innerHeight - 80) / 47);
-    const squareHeight = Math.floor((window.innerHeight - 80) / amtRows);
-    amtCols = Math.floor(window.innerWidth / squareHeight);
+  let amtCols = Math.floor(window.innerWidth / 38);
+  const squareWidth = Math.floor(window.innerWidth / amtCols);
+  let amtRows = Math.floor((window.innerHeight - 80) / squareWidth);
+  if (initalLoad) {
+    START_NODE_COL = Math.floor(amtCols / 3) - 1;
+    START_NODE_ROW = Math.floor(amtRows / 2);
+    FINISH_NODE_COL = Math.floor((amtCols * 2) / 3) + 1;
+    FINISH_NODE_ROW = Math.floor(amtRows / 2);
   }
-  START_NODE_COL = Math.floor(amtCols / 3) - 1;
-  START_NODE_ROW = Math.floor(amtRows / 2);
-  FINISH_NODE_COL = Math.floor((amtCols * 2) / 3) + 1;
-  FINISH_NODE_ROW = Math.floor(amtRows / 2);
   for (let row = 0; row < amtRows; row++) {
     const currentRow = [];
     for (let col = 0; col < amtCols; col++) {
@@ -215,17 +209,10 @@ const getNewGridWithWallToggled = (grid, row, col) => {
 
 const getNewGridWithUpdatedStartFinish = currentGrid => {
   const newGrid = [];
-  let amtCols = 0;
-  let amtRows = 0;
-  if (window.innerWidth >= window.innerHeight) {
-    amtCols = Math.floor(window.innerWidth / 38);
-    const squareWidth = Math.floor(window.innerWidth / amtCols);
-    amtRows = Math.floor((window.innerHeight - 80) / squareWidth);
-  } else {
-    amtRows = Math.floor((window.innerHeight - 80) / 47);
-    const squareHeight = Math.floor((window.innerHeight - 80) / amtRows);
-    amtCols = Math.floor(window.innerWidth / squareHeight);
-  }
+  let amtCols = Math.floor(window.innerWidth / 38);
+  const squareWidth = Math.floor(window.innerWidth / amtCols);
+  let amtRows = Math.floor((window.innerHeight - 80) / squareWidth);
+
   for (let row = 0; row < amtRows; row++) {
     const currentRow = [];
     for (let col = 0; col < amtCols; col++) {

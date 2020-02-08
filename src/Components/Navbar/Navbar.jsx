@@ -19,7 +19,8 @@ import DropDownButton from "./DropDownButton";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    padding: 0
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -68,27 +69,29 @@ export default function Navbar(props) {
               endIcon={<PlayArrowIcon />}
               style={{ background: "limegreen", margin: "0 10px 0 10px" }}
               onClick={handleRun}
+              elevation={0}
+              disableElevation
             >
-              Run
+              {window.innerWidth >= 680 ? "Run" : null}
             </Button>
             <Button
               variant="contained"
               color="secondary"
               endIcon={<DeleteIcon />}
-              onClick={() => props.clearGrid()}
+              onClick={() => props.clearGrid(false)}
               disableElevation
               elevation={0}
             >
-              Clear Board
+              {window.innerWidth >= 680 ? "Clear Board" : null}
             </Button>
           </Grid>
           <div>
             <Button
               variant="outlined"
-              color="primary"
+              color="secondary"
               onClick={handleClickOpen}
             >
-              Instructions
+              Help
             </Button>
             <Dialog
               onClose={handleClose}
