@@ -4,7 +4,7 @@ import {
   dijkstra,
   getNodesInShortestPathOrder
 } from "../algorithms/dijkstraAndAstar";
-import Navbar from "../Components/Navbar";
+import Navbar from "../Components/Navbar/Navbar";
 
 import "./PathfinderVisualizer.css";
 
