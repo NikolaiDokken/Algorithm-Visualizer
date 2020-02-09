@@ -12,6 +12,8 @@ let START_NODE_ROW = 10;
 let START_NODE_COL = 15;
 let FINISH_NODE_ROW = 10;
 let FINISH_NODE_COL = 35;
+let prevX = 0,
+  prevY = 0;
 
 export default class PathfinderVisualizer extends Component {
   constructor(props) {
@@ -24,6 +26,79 @@ export default class PathfinderVisualizer extends Component {
     };
     this.visualizeDijkstra = this.visualizeDijkstra.bind(this);
     this.clearGrid = this.clearGrid.bind(this);
+    this.touchHandler = this.touchHandler.bind(this);
+    this.init = this.init.bind(this);
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+  }
+
+  touchHandler(event) {
+    var touches = event.changedTouches,
+      first = touches[0],
+      type = "";
+    switch (event.type) {
+      case "touchstart":
+        type = "mousedown";
+        break;
+      case "touchmove":
+        type = "mousemove";
+        break;
+      case "touchend":
+        type = "mouseup";
+        break;
+      default:
+        return;
+    }
+    var simulatedEvent = document.createEvent("MouseEvent");
+    simulatedEvent.initMouseEvent(
+      type,
+      true,
+      true,
+      window,
+      1,
+      first.screenX,
+      first.screenY,
+      first.clientX,
+      first.clientY,
+      false,
+      false,
+      false,
+      false,
+      0 /*left*/,
+      null
+    );
+    const node = document
+      .elementFromPoint(first.clientX, first.clientY)
+      .id.split("-");
+
+    if (node[1] !== undefined && node[2] !== undefined) {
+      if (event.type === "touchstart") {
+        this.handleMouseDown(node[1], node[2]);
+      }
+      if (node[1] !== prevX || node[2] !== prevY) {
+        this.handleMousEnter(parseInt(node[1]), parseInt(node[2]));
+      }
+    }
+    if (event.type === "touchend") {
+      prevX = 0;
+      prevY = 0;
+      this.handleMouseUp();
+      const newGrid = getNewGridWithUpdatedStartFinish(this.state.grid);
+      this.setState({ grid: newGrid });
+    }
+    first.target.dispatchEvent(simulatedEvent);
+    if (event.type !== "touchend") {
+      prevX = node[1];
+      prevY = node[2];
+    }
+    event.preventDefault();
+  }
+
+  init() {
+    const targetElement = document.querySelector("#grid");
+    targetElement.addEventListener("touchstart", this.touchHandler, true);
+    targetElement.addEventListener("touchmove", this.touchHandler, true);
+    targetElement.addEventListener("touchend", this.touchHandler, true);
+    targetElement.addEventListener("touchcancel", this.touchHandler, true);
   }
 
   clearGrid(initialLoad) {
@@ -49,6 +124,7 @@ export default class PathfinderVisualizer extends Component {
   }
 
   componentDidMount() {
+    this.init();
     this.clearGrid(true);
   }
 
@@ -130,7 +206,7 @@ export default class PathfinderVisualizer extends Component {
           visualizeFunction={this.visualizeDijkstra}
           clearGrid={this.clearGrid}
         />
-        <div className="grid">
+        <div className="grid" id="grid">
           {grid.map((row, rowIndex) => {
             return (
               <div key={rowIndex} className="grid-row">

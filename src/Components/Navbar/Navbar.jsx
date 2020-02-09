@@ -10,12 +10,16 @@ import {
   DialogActions,
   DialogTitle,
   DialogContent,
-  Hidden
+  Hidden,
+  IconButton
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 
 import DropDownButton from "./DropDownButton";
+const bodyScrollLock = require("body-scroll-lock");
+const enableBodyScroll = bodyScrollLock.enableBodyScroll;
+const disableBodyScroll = bodyScrollLock.disableBodyScroll;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,8 +39,12 @@ export default function Navbar(props) {
 
   function handleClose() {
     setOpen(false);
+    const targetElement = document.querySelector("#root");
+    disableBodyScroll(targetElement);
   }
   function handleClickOpen() {
+    const targetElement = document.querySelector("#root");
+    enableBodyScroll(targetElement);
     setOpen(true);
   }
 
@@ -52,83 +60,127 @@ export default function Navbar(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" style={{ background: "#000" }}>
+      <AppBar position="static" style={{ background: "#313131" }}>
         <Toolbar>
-          <Hidden smDown>
-            <Typography color="inherit" style={{ width: "280px" }}>
-              Shortest path Algorithm Visualizer
-            </Typography>
-          </Hidden>
-          <Grid container justify="center">
-            <DropDownButton
-              currentIndex={currentIndex}
-              setCurrentIndex={setCurrentIndex}
-            />
-            <Button
-              variant="contained"
-              endIcon={<PlayArrowIcon />}
-              style={{ background: "limegreen", margin: "0 10px 0 10px" }}
-              onClick={handleRun}
-              elevation={0}
-              disableElevation
-            >
-              {window.innerWidth >= 680 ? "Run" : null}
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              endIcon={<DeleteIcon />}
-              onClick={() => props.clearGrid(false)}
-              disableElevation
-              elevation={0}
-            >
-              {window.innerWidth >= 680 ? "Clear Board" : null}
-            </Button>
-          </Grid>
-          <div>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={handleClickOpen}
-            >
-              Help
-            </Button>
-            <Dialog
-              onClose={handleClose}
-              aria-labelledby="customized-dialog-title"
-              open={open}
-            >
-              <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-                Instructions
-              </DialogTitle>
-              <DialogContent dividers>
-                <Typography gutterBottom>
-                  1. Pick an algorithm{" "}
-                  <font color="#0328fc">(Blue button)</font>
-                  <br /> 2. (Optional) Draw walls by dragging/clicking squares.
-                  <br /> 3. (Optional) Move start/end node by dragging them to
-                  another square.
-                  <br /> 4. Run the algorithm{" "}
-                  <font color="limegreen">(Green button)</font>
-                  <br /> 5. Clear the board to go again.
-                  <font color="red">(Red button).</font> Start/end node will
-                  remain at same place
-                  <br />
-                  <br />
-                  Mobile users: View the page in landscape mode to get a bigger
-                  grid.
-                  <br />
-                  Drawing walls by dragging on mobile is currently not possible,
-                  I am working on fixing this!
+          <Grid container direction="row">
+            <Grid item xs>
+              <Hidden smDown>
+                <Typography color="inherit">
+                  Shortest path Algorithm Visualizer
                 </Typography>
-              </DialogContent>
-              <DialogActions>
-                <Button autoFocus onClick={handleClose} color="primary">
-                  Ok
+              </Hidden>
+            </Grid>
+            <Grid item xs style={{ zIndex: "5000" }}>
+              <DropDownButton
+                currentIndex={currentIndex}
+                setCurrentIndex={setCurrentIndex}
+              />
+            </Grid>
+            <Grid item xs>
+              {window.innerWidth >= 680 ? (
+                <Button
+                  variant="contained"
+                  endIcon={<PlayArrowIcon />}
+                  style={{ background: "limegreen" }}
+                  onClick={handleRun}
+                  elevation={0}
+                  disableElevation
+                >
+                  Run
                 </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
+              ) : (
+                <IconButton
+                  onClick={handleRun}
+                  style={{
+                    color: "limegreen",
+                    borderRadius: "100%",
+                    padding: "4px",
+                    margin: "0 10px 0 10px"
+                  }}
+                >
+                  <PlayArrowIcon />
+                </IconButton>
+              )}
+            </Grid>
+            <Grid item xs>
+              {window.innerWidth >= 680 ? (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  endIcon={<DeleteIcon />}
+                  onClick={() => props.clearGrid(false)}
+                  disableElevation
+                  elevation={0}
+                >
+                  Clear Board
+                </Button>
+              ) : (
+                <IconButton
+                  onClick={() => props.clearGrid(false)}
+                  color="secondary"
+                  style={{
+                    borderRadius: "100%",
+                    padding: "4px",
+                    margin: "0 10px 0 10px"
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
+            </Grid>
+            <Grid item xs>
+              <div id="dialogwindow">
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleClickOpen}
+                >
+                  Help
+                </Button>
+                <Dialog
+                  onClose={handleClose}
+                  aria-labelledby="customized-dialog-title"
+                  open={open}
+                >
+                  <DialogTitle
+                    id="customized-dialog-title"
+                    onClose={handleClose}
+                  >
+                    Instructions
+                  </DialogTitle>
+                  <DialogContent dividers>
+                    <Typography gutterBottom>
+                      1. Pick an algorithm{" "}
+                      <font color="#fff" style={{ background: "black" }}>
+                        (White button)
+                      </font>
+                      <br /> 2. (Optional) Draw walls by dragging/clicking
+                      squares.
+                      <br /> 3. (Optional) Move start/end node by dragging them
+                      to another square.
+                      <br /> 4. Run the algorithm{" "}
+                      <font color="limegreen">(Green button)</font>
+                      <br /> 5. Clear the board to go again.
+                      <font color="red">(Red button).</font> Start/end node will
+                      remain at same place
+                      <br />
+                      <br />
+                      Mobile users: View the page in landscape mode to get a
+                      bigger grid.
+                      <br />
+                      Drawing walls by dragging on mobile is currently not
+                      possible, I am working on fixing this!
+                    </Typography>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button autoFocus onClick={handleClose} color="primary">
+                      Ok
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
     </div>

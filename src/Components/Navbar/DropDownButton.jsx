@@ -29,25 +29,23 @@ export default function DropDownButton(props) {
   };
 
   return (
-    <div style={{ zIndex: "5000" }}>
+    <div>
       <Grid container direction="column" alignItems="center">
         <Grid item xs={12}>
-          <ButtonGroup
-            variant="contained"
-            color="primary"
-            ref={anchorRef}
-            aria-label="split button"
-          >
-            <Button style={{ background: "#0328fc" }}>
+          <ButtonGroup ref={anchorRef}>
+            <Button
+              variant="outlined"
+              style={{
+                borderColor: "white",
+                color: "white"
+              }}
+            >
               {options[props.currentIndex]}
             </Button>
             <Button
-              style={{ background: "#0328fc" }}
+              variant="outlined"
+              style={{ borderColor: "white", color: "white" }}
               size="small"
-              aria-controls={open ? "split-button-menu" : undefined}
-              aria-expanded={open ? "true" : undefined}
-              aria-label="select merge strategy"
-              aria-haspopup="menu"
               onClick={handleToggle}
             >
               <ArrowDropDownIcon />
