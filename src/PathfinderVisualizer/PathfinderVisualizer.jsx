@@ -287,7 +287,7 @@ const getNewGridWithUpdatedStartFinish = currentGrid => {
   const newGrid = [];
   let amtCols = Math.floor(window.innerWidth / 38);
   const squareWidth = Math.floor(window.innerWidth / amtCols);
-  let amtRows = Math.floor((window.innerHeight - 80) / squareWidth);
+  let amtRows = Math.floor((window.innerHeight - 70) / squareWidth);
 
   for (let row = 0; row < amtRows; row++) {
     const currentRow = [];
