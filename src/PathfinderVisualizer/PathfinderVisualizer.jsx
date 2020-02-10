@@ -243,7 +243,7 @@ const getInitialGrid = initalLoad => {
   const grid = [];
   let amtCols = Math.floor(window.innerWidth / 38);
   const squareWidth = Math.floor(window.innerWidth / amtCols);
-  let amtRows = Math.floor((window.innerHeight - 80) / squareWidth);
+  let amtRows = Math.floor((window.innerHeight - 70) / squareWidth);
   if (initalLoad) {
     START_NODE_COL = Math.floor(amtCols / 3) - 1;
     START_NODE_ROW = Math.floor(amtRows / 2);

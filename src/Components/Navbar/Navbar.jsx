@@ -60,7 +60,7 @@ export default function Navbar(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" style={{ background: "#313131" }}>
+      <AppBar position="static" style={{ background: "#313131" }} elevation={0}>
         <Toolbar>
           <Grid container direction="row">
             <Grid item xs>
@@ -111,6 +111,7 @@ export default function Navbar(props) {
                   onClick={() => props.clearGrid(false)}
                   disableElevation
                   elevation={0}
+                  style={{ paddingLeft: "2px", paddingRight: "2px" }}
                 >
                   Clear Board
                 </Button>

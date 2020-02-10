@@ -10,7 +10,11 @@ import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 
-const options = ["Algorithm", "A*", "Dijkstra"];
+const options = [
+  window.innerWidth >= 362 ? "Algorithm" : "Algo",
+  "A*",
+  "Dijkstra"
+];
 
 export default function DropDownButton(props) {
   const [open, setOpen] = React.useState(false);
