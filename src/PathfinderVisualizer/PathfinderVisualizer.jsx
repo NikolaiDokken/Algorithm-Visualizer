@@ -82,8 +82,8 @@ export default class PathfinderVisualizer extends Component {
       prevX = 0;
       prevY = 0;
       this.handleMouseUp();
-      const newGrid = getNewGridWithUpdatedStartFinish(this.state.grid);
-      this.setState({ grid: newGrid });
+      // const newGrid = getNewGridWithUpdatedStartFinish(this.state.grid);
+      // this.setState({ grid: newGrid });
     }
     first.target.dispatchEvent(simulatedEvent);
     if (event.type !== "touchend") {

@@ -73,18 +73,22 @@ export default function DropDownButton(props) {
                 <Paper className="dropdown">
                   <ClickAwayListener onClickAway={handleClose}>
                     <MenuList id="split-button-menu">
-                      {options.map((option, index) => (
-                        <MenuItem
-                          key={index}
-                          selected={index === props.currentIndex}
-                          onClick={event => {
-                            props.setCurrentIndex(index);
-                            setOpen(false);
-                          }}
-                        >
-                          {option}
-                        </MenuItem>
-                      ))}
+                      {options.map((option, index) => {
+                        if (index !== 0) {
+                          return (
+                            <MenuItem
+                              key={index}
+                              selected={index === props.currentIndex}
+                              onClick={event => {
+                                props.setCurrentIndex(index);
+                                setOpen(false);
+                              }}
+                            >
+                              {option}
+                            </MenuItem>
+                          );
+                        } else return null;
+                      })}
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
